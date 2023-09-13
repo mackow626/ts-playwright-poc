@@ -1,18 +1,17 @@
 import { test, expect } from '@playwright/test';
+import { loginData } from '../test-data/login.data';
 
 test.describe('User login to demo bank', () => {
   //Arrange
-  const login = 'tester12';
-  const password = 'segseggg';
-  
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
   test('succesfull login', async ({ page }) => {
     //Act
-    await page.getByTestId('login-input').fill(login);
-    await page.getByTestId('password-input').fill(password);
+    await page.getByTestId('login-input').fill(loginData.login);
+    await page.getByTestId('password-input').fill(loginData.password);
     await page.getByTestId('login-button').click();
 
     //Assert
@@ -29,7 +28,7 @@ test.describe('User login to demo bank', () => {
   });
 
   test('unsuccesfull login too short password', async ({ page }) => {
-    await page.getByTestId('login-input').fill(login);
+    await page.getByTestId('login-input').fill(loginData.login);
     await page.getByTestId('password-input').fill('fawf');
     await page.getByTestId('password-input').blur();
 
