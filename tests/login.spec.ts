@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
 import { LoginPage } from '../pages/login.page';
+import { PulpitPage } from '../pages/pulpit.page';
 
 test.describe('User login to demo bank', () => {
   //Arrange
@@ -17,13 +18,15 @@ test.describe('User login to demo bank', () => {
     await loginPage.loginButton.click();
 
     //Assert
-    await expect(page.getByTestId('user-name')).toHaveText('Jan Demobankowy');
+    await expect(new PulpitPage(page).userNameLabel).toHaveText(
+      'Jan Demobankowy',
+    );
   });
 
   test('unsuccesfull login too short username', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.loginInput.fill('teste');
-    await page.getByTestId('login-input').press('Tab');
+    await loginPage.loginInput.press('Tab');
 
     await expect(loginPage.loginError).toHaveText(
       'identyfikator ma min. 8 znaków',
