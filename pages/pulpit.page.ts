@@ -12,4 +12,12 @@ export class PulpitPage {
   closeConfiramtionButton = this.page.getByTestId('close-button');
   confirmationMessage = this.page.locator('#show_messages');
   moneyBalance = this.page.locator('#money_value');
+
+  async makeTranser(transferAmount: string, title: string) {
+    await this.transferToInput.selectOption('2');
+    await this.transferAmountInput.fill(transferAmount);
+    await this.transferTitleInput.fill(title);
+    await this.sendTransferButton.click();
+    await this.closeConfiramtionButton.click();
+  }
 }

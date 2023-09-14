@@ -17,11 +17,7 @@ test.describe('Pulpit tests', () => {
 
   test('basic transfer', async ({ page }) => {
     //Act
-    await publicPage.transferToInput.selectOption('2');
-    await publicPage.transferAmountInput.fill(transferAmount);
-    await publicPage.transferTitleInput.fill(title);
-    await publicPage.sendTransferButton.click();
-    await publicPage.closeConfiramtionButton.click();
+    await publicPage.makeTranser(transferAmount, title);
 
     //Assert
     await expect(publicPage.confirmationMessage).toHaveText(
@@ -35,11 +31,7 @@ test.describe('Pulpit tests', () => {
     const expectedBalance = Number(initialBalance) - Number(transferAmount);
 
     //Act
-    await publicPage.transferToInput.selectOption('2');
-    await publicPage.transferAmountInput.fill(transferAmount);
-    await publicPage.transferTitleInput.fill(title);
-    await publicPage.sendTransferButton.click();
-    await publicPage.closeConfiramtionButton.click();
+    await publicPage.makeTranser(transferAmount, title);
 
     //Assert
     await expect(publicPage.moneyBalance).toHaveText(`${expectedBalance}`);
