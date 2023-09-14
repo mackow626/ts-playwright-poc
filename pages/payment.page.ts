@@ -11,4 +11,16 @@ export class PaymentPage {
     name: 'wykonaj przelew',
   });
   closeConfiramtionButton = this.page.getByTestId('close-button');
+
+  async makeTransfer(
+    reciver: string,
+    accountNumber: string,
+    transferAmount: string,
+  ): Promise<void> {
+    await this.transferReciverInput.fill(reciver);
+    await this.transferToInput.fill(accountNumber);
+    await this.amountInput.fill(transferAmount);
+    await this.sendTransferButton.click();
+    await this.closeConfiramtionButton.click();
+  }
 }
