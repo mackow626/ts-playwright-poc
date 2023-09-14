@@ -6,18 +6,17 @@ import { PulpitPage } from '../pages/pulpit.page';
 test.describe('Pulpit tests', () => {
   const transferAmount = '120';
   const title = 'zwrot';
+  let publicPage: PulpitPage;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     const loginPage = new LoginPage(page);
-    await loginPage.loginInput.fill(loginData.login);
-    await loginPage.passwordInput.fill(loginData.login);
-    await loginPage.loginButton.click();
+    await loginPage.login(loginData.login, loginData.password);
+    publicPage = new PulpitPage(page);
   });
 
   test('basic transfer', async ({ page }) => {
     //Act
-    const publicPage = new PulpitPage(page);
     await publicPage.transferToInput.selectOption('2');
     await publicPage.transferAmountInput.fill(transferAmount);
     await publicPage.transferTitleInput.fill(title);
@@ -32,7 +31,6 @@ test.describe('Pulpit tests', () => {
 
   test('balance test', async ({ page }) => {
     //Arrange
-    const publicPage = new PulpitPage(page);
     const initialBalance = await publicPage.moneyBalance.innerText();
     const expectedBalance = Number(initialBalance) - Number(transferAmount);
 
