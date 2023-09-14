@@ -14,7 +14,7 @@ test.describe('Payment tests', () => {
     await loginPage.loginInput.fill(loginData.login);
     await loginPage.passwordInput.fill(loginData.login);
     await loginPage.loginButton.click();
-    await page.getByRole('link', { name: 'płatności' }).click();
+    await new PulpitPage(page).sideMenu.paymentTab.click();
   });
 
   test('simple payment', async ({ page }) => {
