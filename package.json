@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test ",
-    "test:headed" : "npx playwright test --headed",
-    "test:pulpit:headed" : "npm run test tests/pulpit.spec.ts  -- --headed"
+    "test:headed": "npx playwright test --headed",
+    "test:pulpit:headed": "npm run test tests/pulpit.spec.ts  -- --headed"
   },
   "keywords": [],
   "author": "",
