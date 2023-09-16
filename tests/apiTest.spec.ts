@@ -1,46 +1,86 @@
-import {expect, request, test} from '@playwright/test';
+import { expect, request, test } from '@playwright/test';
 
-const REPO = 'test-repo-1';
-const USER = 'github-username';
-
-// Request context is reused by all tests in the file.
-let apiContext;
-
-test.beforeAll(async ({playwright}) => {
+test.describe('Reservation api tests', () => {
+  let apiContext;
+  test.beforeAll(async () => {
     apiContext = await request.newContext({
-        baseURL: 'http://hotel-test.equalexperts.io',
-        extraHTTPHeaders: {
-            Accept: '*/*',
-            // Add GitHub personal access token.
-            'Authorization': `Basic YWRtaW46cGFzc3dvcmQxMjM=`,
-        },
+      baseURL: 'http://hotel-test.equalexperts.io',
+      extraHTTPHeaders: {
+        Accept: '*/*',
+        Authorization: 'Basic YWRtaW46cGFzc3dvcmQxMjM=',
+      },
     });
-});
+  });
 
-test.afterAll(async ({}) => {
-    // Dispose all responses.
+  test.afterAll(async ({}) => {
     await apiContext.dispose();
-});
+  });
 
-test.only('delete all reservations', async ({page}) => {
-    const newIssue = await apiContext.get(`/booking`);
-    expect(newIssue.ok()).toBeTruthy();
-    const json = newIssue.json();
-    // json.query()
-    // expect(json.string[0].bookingid).toContain("123")
-    // var names = jp.query(cities, '$..name');
-    const responseJson = JSON.parse(await newIssue.text());
-    //  const body = JSON.parse( newIssue.body.toString());
-    // // let list: MyObj = JSON.parse(await newIssue.json());
-    console.log(responseJson.size);
+  test('create reservation with random name', async () => {
+    //Arrange
+    let name = Math.random().toString().substr(2, 5);
 
+    //Act
+    const newIssue1 = await apiContext.post(`/booking`, {
+      data: {
+        firstname: name,
+        lastname: name,
+        totalprice: '33',
+        depositpaid: 'true',
+        bookingdates: { checkin: '2023-09-11', checkout: '2023-09-22' },
+      },
+    });
+    const responseJson = JSON.parse(await newIssue1.text());
 
-    for (let i = 0; i < responseJson.length; i++) {
-        const bookingid = responseJson[i].bookingid;
-        console.log(bookingid);
+    //Assert
+    expect(newIssue1.ok()).toBeTruthy();
+    expect(await responseJson.booking.firstname).toEqual(name);
+    expect(await responseJson.booking.lastname).toEqual(name);
+  });
 
+  test('delete all reservations', async () => {
+    //Act
+    let allReservationResponse = await apiContext.get(`/booking`);
+    expect(allReservationResponse.ok()).toBeTruthy();
+    let responseJson = JSON.parse(await allReservationResponse.text());
 
-        let apiResponse = await apiContext.delete(`/booking/${bookingid}`, {});
-        expect(apiResponse.ok()).toBeTruthy();
+    for (const item of responseJson) {
+      let apiResponse = await apiContext.delete(
+        `/booking/${item.bookingid}`,
+        {},
+      );
+      expect(apiResponse.ok()).toBeTruthy();
     }
+
+    //Assert
+    const allReservationResponseAfterDelete = await apiContext.get(`/booking`);
+    expect(await allReservationResponseAfterDelete.text()).not.toContain(
+      'bookingid',
+    );
+  });
+
+  test('get single reseration', async () => {
+    //Arrange
+    let name = Math.random().toString().substr(2, 5);
+    const newReservation = await apiContext.post(`/booking`, {
+      data: {
+        firstname: name,
+        lastname: name,
+        totalprice: '33',
+        depositpaid: 'true',
+        bookingdates: { checkin: '2023-09-11', checkout: '2023-09-22' },
+      },
+    });
+    const responseJson = JSON.parse(await newReservation.text());
+    const reservationId = responseJson.bookingid;
+
+    //Act
+    const singleReservation = await apiContext.get(`/booking/${reservationId}`);
+    const singleReservationJson = JSON.parse(await singleReservation.text());
+
+    //Assert
+    expect(singleReservation.ok()).toBeTruthy();
+    expect(await singleReservationJson.firstname).toEqual(name);
+    expect(await singleReservationJson.lastname).toEqual(name);
+  });
 });
