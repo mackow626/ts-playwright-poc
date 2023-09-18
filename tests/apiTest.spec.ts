@@ -44,19 +44,27 @@ test.describe('Reservation api tests', () => {
     expect(allReservationResponse.ok()).toBeTruthy();
     let responseJson = JSON.parse(await allReservationResponse.text());
 
+    let idsOfReservationsBeforeDeletion: string[] = [];
+
     for (const item of responseJson) {
       let apiResponse = await apiContext.delete(
         `/booking/${item.bookingid}`,
         {},
       );
+      idsOfReservationsBeforeDeletion.push(item.bookingid);
       expect(apiResponse.ok()).toBeTruthy();
     }
 
     //Assert
     const allReservationResponseAfterDelete = await apiContext.get(`/booking`);
-    expect(await allReservationResponseAfterDelete.text()).not.toContain(
-      'bookingid',
+    let responseJsonAfterDelete = JSON.parse(
+      await allReservationResponseAfterDelete.text(),
     );
+    expect(responseJsonAfterDelete).not.toContain(responseJson);
+
+    for (const item of responseJsonAfterDelete) {
+      expect(idsOfReservationsBeforeDeletion).not.toContain(item.booking);
+    }
   });
 
   test('get single reseration', async () => {
