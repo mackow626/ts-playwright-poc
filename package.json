@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx playwright test ",
     "test:headed": "npx playwright test --headed",
-    "test:pulpit:headed": "npm run test tests/pulpit.spec.ts  -- --headed"
+    "test:pulpit:headed": "npm run test tests/pulpit.spec.ts  -- --headed",
+    "test:pulpit:headed:project": "npm run test tests/pulpit.spec.ts  -- --headed -- --project=chromium"
   },
   "keywords": [],
   "author": "",

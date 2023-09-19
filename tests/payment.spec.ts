@@ -5,17 +5,11 @@ import { PaymentPage } from '../pages/payment.page';
 import { PulpitPage } from '../pages/pulpit.page';
 
 test.describe('Payment tests', () => {
-  const transferAmount = '120';
-  const title = 'zwrot';
-
-  test.beforeEach(async ({ page }) => {
+  test('simple payment', async ({ page }) => {
     await page.goto('/');
     const loginPage = new LoginPage(page);
     await loginPage.login(loginData.login, loginData.password);
     await new PulpitPage(page).sideMenu.paymentTab.click();
-  });
-
-  test('simple payment', async ({ page }) => {
     // Arrange
     const transferAmount = '222';
     const accountNumber = '12 3123 1231 2312 3333 3333';

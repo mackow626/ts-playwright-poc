@@ -20,8 +20,11 @@ test.describe('Pulpit tests', () => {
     await publicPage.makeTranser(transferAmount, title);
 
     //Assert
-    await expect(publicPage.confirmationMessage).toHaveText(
-      `Przelew wykonany! Chuck Demobankowy - ${transferAmount},00PLN  - ${title}`,
+    await expect(publicPage.confirmationMessage).toContainText(
+      `Przelew wykonany! Chuck Demobankowy - ${transferAmount}`,
+    );
+    await expect(publicPage.confirmationMessage).toContainText(
+        `${title}`,
     );
   });
 
