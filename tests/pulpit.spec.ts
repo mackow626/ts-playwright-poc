@@ -1,42 +1,36 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
-import { LoginPage } from '../pages/login.page';
-import { PulpitPage } from '../pages/pulpit.page';
+import { test } from '../fixtures/basePage';
 
 test.describe('Pulpit tests', () => {
   const transferAmount = '120';
   const title = 'zwrot';
-  let publicPage: PulpitPage;
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, loginPage }) => {
     await page.goto('/');
-    const loginPage = new LoginPage(page);
     await loginPage.login(loginData.login, loginData.password);
-    publicPage = new PulpitPage(page);
   });
 
-  test('basic transfer', async ({ page }) => {
+  test('basic transfer', async ({ pulpitPage }) => {
     //Act
-    await publicPage.makeTranser(transferAmount, title);
+    await pulpitPage.makeTranser(transferAmount, title);
 
     //Assert
-    await expect(publicPage.confirmationMessage).toContainText(
+    await expect(pulpitPage.confirmationMessage).toContainText(
       `Przelew wykonany! Chuck Demobankowy - ${transferAmount}`,
     );
-    await expect(publicPage.confirmationMessage).toContainText(
-        `${title}`,
-    );
+    await expect(pulpitPage.confirmationMessage).toContainText(`${title}`);
   });
 
-  test('balance test', async ({ page }) => {
+  test('balance test', async ({ pulpitPage }) => {
     //Arrange
-    const initialBalance = await publicPage.moneyBalance.innerText();
+    const initialBalance = await pulpitPage.moneyBalance.innerText();
     const expectedBalance = Number(initialBalance) - Number(transferAmount);
 
     //Act
-    await publicPage.makeTranser(transferAmount, title);
+    await pulpitPage.makeTranser(transferAmount, title);
 
     //Assert
-    await expect(publicPage.moneyBalance).toHaveText(`${expectedBalance}`);
+    await expect(pulpitPage.moneyBalance).toHaveText(`${expectedBalance}`);
   });
 });

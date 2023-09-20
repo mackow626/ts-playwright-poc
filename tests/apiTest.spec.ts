@@ -92,10 +92,7 @@ test.describe('Reservation api tests', () => {
     expect(await singleReservationJson.lastname).toEqual(name);
   });
 
-
-  test('request intercaption practicesoftwaretesting.com', async ({
-    page,
-  }) => {
+  test('request intercaption practicesoftwaretesting.com', async ({ page }) => {
     //Arrange
     const reservation = {
       current_page: 1,

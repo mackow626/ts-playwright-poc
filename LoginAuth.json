@@ -5,17 +5,7 @@
       "value": "true",
       "domain": "demo-bank.vercel.app",
       "path": "/",
-      "expires": 1695285762,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "eb_dashboard_manager_infobox",
-      "value": "false",
-      "domain": "demo-bank.vercel.app",
-      "path": "/",
-      "expires": 1726735362,
+      "expires": 1695305253,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"

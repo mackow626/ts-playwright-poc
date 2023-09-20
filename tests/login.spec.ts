@@ -1,27 +1,22 @@
-import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
-import { LoginPage } from '../pages/login.page';
-import { PulpitPage } from '../pages/pulpit.page';
+import { test } from '../fixtures/basePage';
+import { expect } from '@playwright/test';
 
 test.describe('User login to demo bank', () => {
-  let loginPage: LoginPage;
-
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    loginPage = new LoginPage(page);
+    console.log(await page.context().storageState());
   });
 
-  test('succesfull login', async ({ page }) => {
+  test('succesfull login', async ({ loginPage, pulpitPage }) => {
     //Act
     await loginPage.login(loginData.login, loginData.password);
 
     //Assert
-    await expect(new PulpitPage(page).userNameLabel).toHaveText(
-      'Jan Demobankowy',
-    );
+    await expect(pulpitPage.userNameLabel).toHaveText('Jan Demobankowy');
   });
 
-  test('unsuccesfull login too short username', async ({ page }) => {
+  test('unsuccesfull login too short username', async ({ loginPage }) => {
     await loginPage.loginInput.fill('teste');
     await loginPage.loginInput.press('Tab');
 
@@ -30,7 +25,7 @@ test.describe('User login to demo bank', () => {
     );
   });
 
-  test('unsuccesfull login too short password', async ({ page }) => {
+  test('unsuccesfull login too short password', async ({ loginPage }) => {
     await loginPage.loginInput.fill(loginData.login);
     await loginPage.passwordInput.fill('fawf');
     await loginPage.passwordInput.blur();
