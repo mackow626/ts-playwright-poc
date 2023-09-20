@@ -39,10 +39,14 @@ export default defineConfig({
       testMatch:"global-setup.ts"
     },
     {
-      name: 'chromium',
+      name: 'chromiumWithLogin',
       dependencies: ["setup"],
       use: { ...devices['Desktop Chrome'], storageState: './LoginAuth.json' },
     },
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome']},
+    // },
 
     // {
     //   name: 'firefox',
