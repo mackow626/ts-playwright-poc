@@ -37,7 +37,7 @@ jobs:
    name: Allure Report
    runs-on: ubuntu-latest
    if: always()
-   needs: [ tests ]
+   needs: [ test ]
    steps:
      - name: Download Artifacts
        uses: actions/download-artifact@v3
