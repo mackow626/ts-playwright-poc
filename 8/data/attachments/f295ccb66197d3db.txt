@@ -1,0 +1,15 @@
+{
+  cookies: [
+    {
+      name: 'eb_dashboard_manager_infobox',
+      value: 'false',
+      domain: 'demo-bank.vercel.app',
+      path: '/',
+      expires: 1726826387,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'Lax'
+    }
+  ],
+  origins: []
+}
