@@ -1,8 +1,19 @@
-Allure commands:
+## This repository is created as a sample usage of Playwright with TypeScript
+### Implementation details:
+#### - POM with fixtures
+#### - API requests with replacing response body
+#### - API requests using stateStorage to login
 
-``` npm run test```
 
-```allure generate .\allure-results\ -o allure-report --clean```
+### Scripts to run tests:
+` npm run test`
 
-````allure open allure-report````
+### Test execution reporting
+
+`allure generate .\allure-results\ -o allure-report --clean`
+
+`allure open allure-report`
+
+#### Link to github pages with custom allure report
+https://mackow626.github.io/ts-playwright-poc/
 
