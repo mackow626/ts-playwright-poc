@@ -1,0 +1,15 @@
+{
+  cookies: [
+    {
+      name: 'isLogged',
+      value: 'true',
+      domain: 'demo-bank.vercel.app',
+      path: '/',
+      expires: 1695387441,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'Lax'
+    }
+  ],
+  origins: []
+}
