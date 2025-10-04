@@ -1,7 +1,7 @@
 name: Playwright Visual Tests (Manual)
 
 on:
-  workflow_dispatch:  # Run only when manually triggered
+  workflow_dispatch:
 
 jobs:
   visual-tests:
@@ -17,17 +17,18 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: |
-          npm ci
-          npx playwright install --with-deps
+        run: npm ci
+
+      # ✅ Proper way to install browsers & system dependencies
+      - name: Install Playwright browsers
+        uses: microsoft/playwright-github-action@v1
 
       - name: Run Playwright visual tests
         id: run-tests
         continue-on-error: true
-        run: |
-          npx playwright test --reporter=list
+        run: npx playwright test --reporter=list
 
-      # ✅ Upload visual diffs only if test failed
+      # ✅ Upload diffs on failure
       - name: Upload visual diffs
         if: failure() || steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
@@ -36,8 +37,8 @@ jobs:
           path: test-results/**/*-diff.png
           if-no-files-found: ignore
 
-      # 🧾 Always upload Playwright HTML report for review
-      - name: Upload Playwright HTML report
+      # 🧾 Always upload HTML report
+      - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
