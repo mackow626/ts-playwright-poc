@@ -34,7 +34,7 @@ jobs:
       - name: Run Playwright visual tests
         id: run-tests
         continue-on-error: true
-        run: npx playwright test --reporter=list
+        run: npx playwright test --update-snapshots --reporter=list
 
       - name: Upload visual diffs
         if: failure() || steps.run-tests.outcome == 'failure'
