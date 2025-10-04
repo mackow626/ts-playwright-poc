@@ -2,6 +2,8 @@ name: Playwright Visual Tests (Manual)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   test:
@@ -40,6 +42,13 @@ jobs:
         with:
           name: visual-diffs
           path: test-results/**/*-diff.png
+          if-no-files-found: ignore
+
+      - name: Upload visual homepage
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage
+          path: screenshots/homepage.png
           if-no-files-found: ignore
 
       - name: Upload Playwright report
