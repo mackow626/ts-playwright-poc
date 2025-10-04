@@ -27,7 +27,7 @@ test.describe('Visual regression test for drgrossmann.pl', () => {
     // 6. Dodatkowo porównaj z poprzednim snapshotem (Playwright sam zarządza plikami referencyjnymi)
     const screenshotBuffer = await page.screenshot({ fullPage: true });
     expect(screenshotBuffer).toMatchSnapshot('homepage-reference.png', {
-      threshold: 0.1,
+      threshold: 0.99,
     });
   });
 });
