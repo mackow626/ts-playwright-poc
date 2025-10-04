@@ -45,6 +45,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload visual homepage
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: homepage
