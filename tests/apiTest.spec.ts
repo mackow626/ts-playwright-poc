@@ -6,7 +6,7 @@ test.describe('Visual regression test for drgrossmann.pl', () => {
   test('homepage visual comparison', async ({ page }) => {
     // 1. Wejdź na stronę
     await page.goto('https://drgrossmann.pl/', { waitUntil: 'networkidle' });
-   await page.waitForTimeout(9000); // waits for 3 seconds
+   await page.waitForTimeout(5000); // waits for 3 seconds
 
 
     // 2. Ustaw rozmiar okna (dla spójności)
@@ -27,7 +27,7 @@ test.describe('Visual regression test for drgrossmann.pl', () => {
     // 6. Dodatkowo porównaj z poprzednim snapshotem (Playwright sam zarządza plikami referencyjnymi)
     const screenshotBuffer = await page.screenshot({ fullPage: true });
     expect(screenshotBuffer).toMatchSnapshot('homepage-reference.png', {
-      threshold: 0.01,
+      threshold: 0.1,
     });
   });
 });

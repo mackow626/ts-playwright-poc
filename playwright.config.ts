@@ -31,20 +31,20 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
+
+
+    viewport: { width: 1280, height: 900 },
+
   },
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'setup',
-      testDir: './',
-      testMatch: 'global-setup.ts',
-    },
-    {
-      name: 'chromiumWithLogin',
-      dependencies: ['setup'],
-      use: { ...devices['Desktop Chrome'], storageState: './LoginAuth.json' },
-    },
+
+      {
+        name: 'chromium',
+        use: { browserName: 'chromium' },
+      },
+
     // {
     //   name: 'chromium',
     //   use: { ...devices['Desktop Chrome']},
