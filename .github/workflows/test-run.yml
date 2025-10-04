@@ -1,7 +1,7 @@
 name: Playwright Visual Tests (Manual)
 
 on:
-  workflow_dispatch:  # 👈 Run only when manually triggered from the GitHub UI
+  workflow_dispatch:  # Run only when manually triggered
 
 jobs:
   visual-tests:
@@ -27,7 +27,7 @@ jobs:
         run: |
           npx playwright test --reporter=list
 
-      # ✅ Upload diff images when test fails
+      # ✅ Upload visual diffs only if test failed
       - name: Upload visual diffs
         if: failure() || steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
@@ -36,7 +36,7 @@ jobs:
           path: test-results/**/*-diff.png
           if-no-files-found: ignore
 
-      # 🧾 Always upload Playwright HTML report
+      # 🧾 Always upload Playwright HTML report for review
       - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
