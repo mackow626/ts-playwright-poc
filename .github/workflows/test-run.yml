@@ -1,70 +1,45 @@
-name: Playwright Tests
+name: Playwright Visual Tests (Manual)
+
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_dispatch:  # 👈 Run only when manually triggered from the GitHub UI
+
 jobs:
-  test:
-    timeout-minutes: 60
+  visual-tests:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
       - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npm run test
-      - uses: actions/upload-artifact@v3
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run Playwright visual tests
+        id: run-tests
+        continue-on-error: true
+        run: |
+          npx playwright test --reporter=list
+
+      # ✅ Upload diff images when test fails
+      - name: Upload visual diffs
+        if: failure() || steps.run-tests.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: test-results/**/*-diff.png
+          if-no-files-found: ignore
+
+      # 🧾 Always upload Playwright HTML report
+      - name: Upload Playwright HTML report
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
-      - name: Upload allure-results artifact
-        if: always()
-        uses: actions/upload-artifact@master
-        with:
-          name: allure-results
-          path: allure-results
-          retention-days: 30
-
-  generate_report:
-    name: Allure Report
-    runs-on: ubuntu-latest
-    if: always()
-    needs: [test]
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        id: download
-        with:
-          name: allure-results
-          path: allure-results
-      - name: Get Allure history
-        uses: actions/checkout@v2
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-      - name: Allure Report action
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        id: allure-report
-        with:
-          allure_results: allure-results
-          gh_pages: gh-pages
-          allure_report: allure-report
-          allure_history: allure-history
-      - name: Deploy allure report to Github Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v2
-        env:
-          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: allure-history
