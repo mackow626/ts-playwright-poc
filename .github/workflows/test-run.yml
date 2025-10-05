@@ -58,15 +58,3 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
-      - name: Notify n8n
-        if: always()
-        run: |
-          STATUS=$(cat status.txt)
-          curl -X POST "${{ github.event.inputs.resumeUrl }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "repo": "${{ github.repository }}",
-              "run_id": "${{ github.run_id }}",
-              "status": "'"$STATUS"'",
-              "report_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
