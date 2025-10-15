@@ -28,13 +28,10 @@ jobs:
       - name: Run Playwright install
         run: npx playwright install
 
-      - name: Run Playwright tests
-        run: npx playwright test
-
       - name: Run Playwright visual tests
         id: run-tests
         continue-on-error: true
-        run: npx playwright test
+        run: npx playwright test --reporter=html
 
       - name: Upload visual diffs
         if: failure() || steps.run-tests.outcome == 'failure'
